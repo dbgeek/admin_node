@@ -27,7 +27,7 @@ resource "scaleway_server" "tf-admin-node" {
   provisioner "remote-exec" {
     inline = [
       "apt-get -qq update",
-      "apt-get -qq install emacs mosh git",
+      "apt-get -qq install emacs mosh git docker.io",
       "adduser --disabled-password --gecos \" \" admin",
       "curl -O https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz",
       "tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz",
@@ -36,7 +36,9 @@ resource "scaleway_server" "tf-admin-node" {
 			"su - admin -c 'go get -u github.com/golang/lint/golint'",
 			"su - admin -c 'mkdir -p ~/.emacs.d/go-mode'",
 			"su - admin -c 'curl https://raw.githubusercontent.com/dominikh/go-mode.el/master/go-mode-autoloads.el -o ~/.emacs.d/go-mode/go-mode-autoloads.el'",
-			"su - admin -c 'go get -u github.com/golang/lint/golint'",
+			"su - admin -c 'export GOPATH=~/ && go get -u github.com/golang/lint/golint'",
+			"ln -sf /usr/bin/docker.io /usr/local/bin/docker",
+			"sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io",
     ]
 
     connection {

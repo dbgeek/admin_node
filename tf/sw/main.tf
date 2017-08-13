@@ -35,6 +35,17 @@ resource "scaleway_server" "tf-admin-node" {
     }
   }
 
+  provisioner "file" {
+    source      = "~/.ssh/id_rsa"
+    destination = "/root/.ssh_id_rsa"
+
+    connection {
+      type        = "ssh"
+      user        = "root"
+      private_key = "${file("~/.ssh/id_rsa")}"
+    }
+  }
+
   provisioner "remote-exec" {
     inline = [
       "apt-get -qq update",
@@ -43,7 +54,7 @@ resource "scaleway_server" "tf-admin-node" {
       "curl -O https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz",
       "tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz",
       "echo export PATH=\\$PATH:/usr/local/go/bin >> /etc/profile",
-      "su - admin -c 'mkdir -p src/github.com/dbgeek && cd src/github.com/dbgeek &&git clone https://github.com/dbgeek/dotfiles.git'",
+      "su - admin -c 'mkdir -p src/github.com/dbgeek'",
       "su - admin -c 'go get -u github.com/golang/lint/golint'",
       "su - admin -c 'mkdir -p ~/.emacs.d/go-mode'",
       "su - admin -c 'curl https://raw.githubusercontent.com/dominikh/go-mode.el/master/go-mode-autoloads.el -o ~/.emacs.d/go-mode/go-mode-autoloads.el'",
@@ -54,6 +65,8 @@ resource "scaleway_server" "tf-admin-node" {
       "su - admin -c 'mkdir /home/admin/.ssh '",
       "cp ~/.ssh/authorized_keys /home/admin/.ssh/",
       "chown admin:admin /home/admin/.ssh/authorized_keys",
+			"cp /root/.ssh_id_rsa /home/admin/.ssh/id_rsa && chown admin:admin /home/admin/.ssh/id_rsa && chmod 700 /home/admin/.ssh/id_rsa",
+			"su - admin -c 'cd src/github.com/dbgeek && git clone git@github.com:dbgeek/admin_node.git'",
     ]
 
     connection {

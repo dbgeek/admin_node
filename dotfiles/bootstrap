@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+BASE_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+
+# link in file in home folder
+ln -s ${BASE_DIR}/alias_admin_node ~/.alias_admin_node
+ln -s ${BASE_DIR}/bash_profile_adminnode ~/.bash_profile_adminnode
+
+# files will be sourced in 
+echo ".alias_admin_node" >> ~/.dotfiles
+echo ".bash_profile_adminnode" >> ~/.dotfiles

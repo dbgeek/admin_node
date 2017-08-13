@@ -4,4 +4,4 @@ alias set_aws_region_us='export AWS_REGION=us-east-1'
 alias set_aws_region_eu_ir='export AWS_REGION=eu-west-1'
 alias set_aws_region_eu_lo='export AWS_REGION=eu-west-2'
 
-alias aws="docker run --rm -it -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_REGION" hkjn/aws
+alias aws="docker run --rm -it -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_REGION hkjn/aws"

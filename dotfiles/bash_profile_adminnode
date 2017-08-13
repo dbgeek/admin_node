@@ -1,2 +1,9 @@
 export SCALEWAY_TOKEN=$(cat /etc/bnal/secrets/sw | grep SCALEWAY_TOKEN | awk -F "=" '{print $2}')
 export SCALEWAY_ORGANIZATION=$(cat /etc/bnal/secrets/sw | grep SCALEWAY_ORGANIZATION | awk -F "=" '{print $2}')
+
+
+function set_aws_privs {
+  for file in $(ls -1 /etc/bnal/secrets/aws_$1); do
+	  export ${file^^}=$(cat /etc/bnal/secrets/aws_$1/$file)
+  done
+}

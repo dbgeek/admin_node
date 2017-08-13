@@ -65,9 +65,9 @@ resource "scaleway_server" "tf-admin-node" {
       "su - admin -c 'mkdir /home/admin/.ssh '",
       "cp ~/.ssh/authorized_keys /home/admin/.ssh/",
       "chown admin:admin /home/admin/.ssh/authorized_keys",
-			"cp /root/.ssh_id_rsa /home/admin/.ssh/id_rsa && chown admin:admin /home/admin/.ssh/id_rsa && chmod 600 /home/admin/.ssh/id_rsa",
-			"su - admin -c 'ssh-keyscan github.com > ~/.ssh/known_hosts'",
-			"su - admin -c 'cd src/github.com/dbgeek && git clone git@github.com:dbgeek/admin_node.git'",
+      "cp /root/.ssh_id_rsa /home/admin/.ssh/id_rsa && chown admin:admin /home/admin/.ssh/id_rsa && chmod 600 /home/admin/.ssh/id_rsa",
+      "su - admin -c 'ssh-keyscan github.com > ~/.ssh/known_hosts'",
+      "su - admin -c 'cd src/github.com/dbgeek && git clone git@github.com:dbgeek/admin_node.git'",
     ]
 
     connection {

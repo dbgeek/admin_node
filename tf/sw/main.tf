@@ -4,7 +4,7 @@ provider "scaleway" {
 
 data "scaleway_bootscript" "latest" {
   architecture = "x86_64"
-  name_filter  = "latest"
+  name_filter  = "docker"
 }
 
 data "scaleway_image" "centos" {
@@ -24,6 +24,17 @@ resource "scaleway_server" "tf-admin-node" {
   bootscript     = "${data.scaleway_bootscript.latest.id}"
   security_group = "${scaleway_security_group.tf-ssh.id}"
 
+  provisioner "file" {
+    source      = "/home/pi/.secrets.tar"
+    destination = "/root/.secrets.tar"
+
+    connection {
+      type        = "ssh"
+      user        = "root"
+      private_key = "${file("~/.ssh/id_rsa")}"
+    }
+  }
+
   provisioner "remote-exec" {
     inline = [
       "apt-get -qq update",
@@ -32,13 +43,17 @@ resource "scaleway_server" "tf-admin-node" {
       "curl -O https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz",
       "tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz",
       "echo export PATH=\\$PATH:/usr/local/go/bin >> /etc/profile",
-			"su - admin -c 'mkdir -p src/github.com/dbgeek && cd src/github.com/dbgeek &&git clone https://github.com/dbgeek/dotfiles.git'",
-			"su - admin -c 'go get -u github.com/golang/lint/golint'",
-			"su - admin -c 'mkdir -p ~/.emacs.d/go-mode'",
-			"su - admin -c 'curl https://raw.githubusercontent.com/dominikh/go-mode.el/master/go-mode-autoloads.el -o ~/.emacs.d/go-mode/go-mode-autoloads.el'",
-			"su - admin -c 'export GOPATH=~/ && go get -u github.com/golang/lint/golint'",
-			"ln -sf /usr/bin/docker.io /usr/local/bin/docker",
-			"sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io",
+      "su - admin -c 'mkdir -p src/github.com/dbgeek && cd src/github.com/dbgeek &&git clone https://github.com/dbgeek/dotfiles.git'",
+      "su - admin -c 'go get -u github.com/golang/lint/golint'",
+      "su - admin -c 'mkdir -p ~/.emacs.d/go-mode'",
+      "su - admin -c 'curl https://raw.githubusercontent.com/dominikh/go-mode.el/master/go-mode-autoloads.el -o ~/.emacs.d/go-mode/go-mode-autoloads.el'",
+      "su - admin -c 'export GOPATH=~/ && go get -u github.com/golang/lint/golint'",
+      "ln -sf /usr/bin/docker.io /usr/local/bin/docker",
+      "usermod -G docker admin",
+      "tar xf .secrets.tar -C /",
+      "su - admin -c 'mkdir /home/admin/.ssh '",
+      "cp ~/.ssh/authorized_keys /home/admin/.ssh/",
+      "chown admin:admin /home/admin/.ssh/authorized_keys",
     ]
 
     connection {

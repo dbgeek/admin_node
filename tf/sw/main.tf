@@ -58,7 +58,7 @@ resource "scaleway_server" "tf-admin-node" {
       "su - admin -c 'mkdir -p ~/.emacs.d/go-mode'",
       "su - admin -c 'curl https://raw.githubusercontent.com/dominikh/go-mode.el/master/go-mode-autoloads.el -o ~/.emacs.d/go-mode/go-mode-autoloads.el'",
       "su - admin -c 'export GOPATH=~/ && go get -u github.com/golang/lint/golint'",
-			"su - admin -c 'export GOPATH=~/ && go get -u github.com/nsf/gocode'",
+      "su - admin -c 'export GOPATH=~/ && go get -u github.com/nsf/gocode'",
       "ln -sf /usr/bin/docker.io /usr/local/bin/docker",
       "usermod -G docker admin",
       "tar xf .secrets.tar -C /",
@@ -68,7 +68,7 @@ resource "scaleway_server" "tf-admin-node" {
       "cp /root/.ssh_id_rsa /home/admin/.ssh/id_rsa && chown admin:admin /home/admin/.ssh/id_rsa && chmod 600 /home/admin/.ssh/id_rsa",
       "su - admin -c 'ssh-keyscan github.com > ~/.ssh/known_hosts'",
       "su - admin -c 'cd src/github.com/dbgeek && git clone git@github.com:dbgeek/admin_node.git && git clone git@github.com:dbgeek/dotfiles.git && git clone git@github.com:dbgeek/dongpo.git && dotfiles/bootstrap.sh && admin_node/dotfiles/bootstrap'",
-			"su - admin -c 'git config --global user.email "bjorn.ahl@gmail.com" && git config --global user.name "Bjorn Ahl"'",
+      "su - admin -c 'git config --global user.email \"bjorn.ahl@gmail.com\" && git config --global user.name \"Bjorn Ahl\"'",
     ]
 
     connection {

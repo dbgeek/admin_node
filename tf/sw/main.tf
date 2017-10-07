@@ -59,6 +59,7 @@ resource "scaleway_server" "tf-admin-node" {
       "su - admin -c 'curl https://raw.githubusercontent.com/dominikh/go-mode.el/master/go-mode-autoloads.el -o ~/.emacs.d/go-mode/go-mode-autoloads.el'",
       "su - admin -c 'export GOPATH=~/ && go get -u github.com/golang/lint/golint'",
       "su - admin -c 'export GOPATH=~/ && go get -u github.com/nsf/gocode'",
+			"su - admin -c 'export GOPATH=~/ && go get -u golang.org/x/tools/cmd/goimports'",
       "ln -sf /usr/bin/docker.io /usr/local/bin/docker",
       "usermod -G docker admin",
       "tar xf .secrets.tar -C /",
